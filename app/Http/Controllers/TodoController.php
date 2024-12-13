@@ -90,7 +90,7 @@ class TodoController extends Controller
         }
     }
 
-    public function  deletedRecords()
+    public function  deletedTodo()
     {
         try {
             $todo = Todo::onlyTrashed()->get();
@@ -100,7 +100,14 @@ class TodoController extends Controller
         }
     }
 
-    public function forceDelete($id)
+    public function restoreTodo($id)
+    {
+        $todo  = Todo::withTrashed()->findOrFail($id);
+        $todo->restore();
+        return response()->json(['status' => 'success', 'message' => 'Todo restored successfully!']);
+    }
+
+    public function deletePermanently($id)
     {
         $todo = Todo::withTrashed()->findOrFail($id);
 

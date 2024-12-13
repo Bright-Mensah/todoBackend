@@ -9,8 +9,10 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/todos', [TodoController::class, 'index']); // List with filters & search
-Route::post('/todos', [TodoController::class, 'store']); // Create
-Route::put('/todos/{id}', [TodoController::class, 'update']); // Update
-Route::delete('/todos/{id}', [TodoController::class, 'destroy']); // Delete
-Route::get('/todos/deleted', [TodoController::class, 'deletedRecords']);
+Route::get('/todos', [TodoController::class, 'index']); // List with filters & search todos
+Route::post('/todos', [TodoController::class, 'store']); // Create todo
+Route::put('/todos/{id}', [TodoController::class, 'update']); // Update todo
+Route::delete('/todos/{id}', [TodoController::class, 'destroy']); // Delete todo
+Route::get('/todos/deleted', [TodoController::class, 'deletedTodo']); // get deleted todos
+Route::get("/todos/restore/{id}", [TodoController::class, 'restoreTodo']); //restore todos
+Route::delete("/todos/delete-perm/{id}", [TodoController::class, 'deletePermanently']); // delete todo permanently
