@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\TodoController;
+use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -12,8 +13,4 @@ Route::get('/todos', [TodoController::class, 'index']); // List with filters & s
 Route::post('/todos', [TodoController::class, 'store']); // Create
 Route::put('/todos/{id}', [TodoController::class, 'update']); // Update
 Route::delete('/todos/{id}', [TodoController::class, 'destroy']); // Delete
-
-Route::get("/test", function (Request $request) {
-
-    return response()->json(["data" => "sadhasdhsa", "mob", "qwieowei"]);
-});
+Route::get('/todos/deleted', [TodoController::class, 'deletedRecords']);

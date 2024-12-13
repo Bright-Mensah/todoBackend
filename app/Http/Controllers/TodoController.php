@@ -79,13 +79,36 @@ class TodoController extends Controller
 
     public function destroy($id)
     {
-        $todo = Todo::findOrFail($id);
+        try {
+            $todo = Todo::findOrFail($id);
 
-        if (!$todo) {
-            return response()->json(['status' => 'error', 'message' => 'Todo not found'], 404);
+            $todo->delete();
+
+            return response()->json(['status' => 'success', 'message' => 'Todo deleted successfully']);
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'An error occured', 'errorMessage' => $e->getMessage()], 500);
         }
-        $todo->delete();
+    }
 
-        return response()->json(['status' => 'success', 'message' => 'Todo deleted successfully']);
+    public function  deletedRecords()
+    {
+        try {
+            return Todo::onlyTrashed()->get();
+        } catch (Exception $e) {
+            return response()->json(['status' => 'error', 'message' => 'An error occured', 'errorMessage' => $e->getMessage()], 500);
+        }
+    }
+
+    public function forceDelete($id)
+    {
+        $todo = Todo::withTrashed()->findOrFail($id);
+
+        if (!$todo->trashed()) {
+            return response()->json(['status' => 'error', 'message' => 'Todo is not deleted'], 400);
+        }
+
+        $todo->forceDelete();
+
+        return response()->json(['status' => 'success', 'message' => 'Todo permanently deleted']);
     }
 }
