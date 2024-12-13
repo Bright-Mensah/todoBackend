@@ -6,6 +6,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get("/test", function () {
-    return "This is a test route!";
-});
+Route::get('/docs', function () {
+    return redirect('docs/index.html');
+})->name('docs');
