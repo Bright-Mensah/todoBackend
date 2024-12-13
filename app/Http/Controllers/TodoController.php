@@ -147,12 +147,13 @@ class TodoController extends Controller
      * 
      * @urlParam id int required The ID of the todo to delete. Example: 1
      *
-     * @response 204 {
-     *  "message": "Todo deleted successfully"
+     * @response 200 {
+     *   "status": "success",
+     *   "message": "Todo deleted successfully"
      * }
-     * * @response 404 {
-     *  "status": "error",
-     *  "message": "Todo not found"
+     * @response 404 {
+     *   "status": "error",
+     *   "message": "Todo not found"
      * }
      */
 
@@ -163,7 +164,7 @@ class TodoController extends Controller
 
             $todo->delete();
 
-            return response()->json(['status' => 'success', 'message' => 'Todo deleted successfully']);
+            return response()->json(['status' => 'success', 'message' => 'Todo deleted successfully'], 200);
         } catch (ModelNotFoundException $e) {
             return response()->json(['status' => 'error', 'message' => 'Todo not found'], 404);
         }
