@@ -93,7 +93,8 @@ class TodoController extends Controller
     public function  deletedRecords()
     {
         try {
-            return Todo::onlyTrashed()->get();
+            $todo = Todo::onlyTrashed()->get();
+            return response()->json(['status' => 'success', 'data' => $todo]);
         } catch (Exception $e) {
             return response()->json(['status' => 'error', 'message' => 'An error occured', 'errorMessage' => $e->getMessage()], 500);
         }
