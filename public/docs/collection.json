@@ -1,0 +1,358 @@
+{
+    "variable": [
+        {
+            "id": "baseUrl",
+            "key": "baseUrl",
+            "type": "string",
+            "name": "string",
+            "value": "https://todobackend-production-0720.up.railway.app/"
+            
+        }
+    ],
+    "info": {
+        "name": "Todo App API",
+        "_postman_id": "40559617-6ecf-4d06-828e-3db7b350af46",
+        "description": "API documentation for the Todo App.",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Endpoints",
+            "description": "",
+            "item": [
+                {
+                    "name": "List all todos",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api/todos",
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "completed",
+                                    "description": "Filter by status (completed, in progress, not started).",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "search",
+                                    "value": "meeting",
+                                    "description": "Search by title or details.",
+                                    "disabled": false
+                                },
+                                {
+                                    "key": "sort",
+                                    "value": "title%3Aasc",
+                                    "description": "Sort by field (e.g., title:asc, status:desc).",
+                                    "disabled": false
+                                }
+                            ],
+                            "raw": "{{baseUrl}}\/api\/todos?status=completed&search=meeting&sort=title%3Aasc"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"sort_by\":\"status\",\"sort_direction\":\"asc\"}"
+                        },
+                        "description": "This endpoint retrieves a list of todos, filtered by status, sorted, and searchable by title or details.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"data\": [\n     {\n         \"id\": 1,\n         \"title\": \"Sample Todo\",\n         \"details\": \"This is a sample todo\",\n         \"status\": \"in progress\",\n         \"created_at\": \"2024-12-13T12:34:56Z\",\n         \"updated_at\": \"2024-12-13T12:34:56Z\"\n     }\n ]\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Create a new todo",
+                    "request": {
+                        "url": {
+                            "host": "httpdasdass://todobackend-production-0720.up.railway.app/",
+                            "path": "sss",
+                            "query": [],
+                            "raw": "ss"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"title\":\"\\\"Write report\\\"\",\"details\":\"\\\"Complete the report for Monday's meeting\\\"\",\"status\":\"\\\"not started\\\"\"}"
+                        },
+                        "description": "This endpoint creates a new todo item.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 201,
+                            "body": "{\n \"id\": 1,\n \"title\": \"Write report\",\n \"details\": \"Complete the report for Monday's meeting\",\n \"status\": \"not started\",\n \"created_at\": \"2024-12-13T12:34:56Z\",\n \"updated_at\": \"2024-12-13T12:34:56Z\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Update a todo",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api/todos/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/todos\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the todo to update."
+                                }
+                            ]
+                        },
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"title\":\"\\\"Updated report\\\"\",\"details\":\"\\\"Update the report for Tuesday's meeting\\\"\",\"status\":\"\\\"completed\\\"\"}"
+                        },
+                        "description": "This endpoint updates the details of an existing todo item.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"id\": 1,\n \"title\": \"Updated report\",\n \"details\": \"Update the report for Tuesday's meeting\",\n \"status\": \"completed\",\n \"created_at\": \"2024-12-13T12:34:56Z\",\n \"updated_at\": \"2024-12-13T12:45:00Z\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Delete a todo",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api/todos/1",
+                            "query": [],
+                            "raw": "https://todobackend-production-0720.up.railway.app/api/todos/1",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the todo to delete."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "This endpoint deletes a todo by its ID.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 204,
+                            "body": "{\n \"message\": \"Todo deleted successfully\"\n}\n* @response 404 {\n \"status\": \"error\",\n \"message\": \"Todo not found\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Get deleted todos",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/todos\/deleted",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/todos\/deleted"
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "This endpoint retrieves all todos that have been soft-deleted.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"status\": \"success\",\n \"data\": [\n     {\n         \"id\": 1,\n         \"title\": \"Deleted Todo\",\n         \"details\": \"This todo has been deleted\",\n         \"status\": \"not started\",\n         \"created_at\": \"2024-12-01T12:00:00Z\",\n         \"updated_at\": \"2024-12-01T12:00:00Z\",\n         \"deleted_at\": \"2024-12-12T12:00:00Z\"\n     }\n ]\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n \"status\": \"error\",\n \"message\": \"Todo not found\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Restore a deleted todo",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/todos\/restore\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/todos\/restore\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the todo to restore."
+                                }
+                            ]
+                        },
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "This endpoint restores a soft-deleted todo by its ID.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"status\": \"success\",\n \"message\": \"Todo restored successfully!\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n \"status\": \"error\",\n \"message\": \"Todo not found\"\n}",
+                            "name": ""
+                        }
+                    ]
+                },
+                {
+                    "name": "Permanently delete a todo",
+                    "request": {
+                        "url": {
+                            "host": "{{baseUrl}}",
+                            "path": "api\/todos\/delete-perm\/:id",
+                            "query": [],
+                            "raw": "{{baseUrl}}\/api\/todos\/delete-perm\/:id",
+                            "variable": [
+                                {
+                                    "id": "id",
+                                    "key": "id",
+                                    "value": "1",
+                                    "description": "The ID of the todo to delete permanently."
+                                }
+                            ]
+                        },
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": null,
+                        "description": "This endpoint permanently deletes a soft-deleted todo by its ID.\nIt ensures that the todo is already soft-deleted before attempting permanent deletion.",
+                        "auth": {
+                            "type": "noauth"
+                        }
+                    },
+                    "response": [
+                        {
+                            "header": [],
+                            "code": 200,
+                            "body": "{\n \"status\": \"success\",\n \"message\": \"Todo permanently deleted\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 400,
+                            "body": "{\n \"status\": \"error\",\n \"message\": \"Todo is not deleted\"\n}",
+                            "name": ""
+                        },
+                        {
+                            "header": [],
+                            "code": 404,
+                            "body": "{\n \"status\": \"error\",\n \"message\": \"Todo not found\"\n}",
+                            "name": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "auth": {
+        "type": "noauth"
+    }
+}

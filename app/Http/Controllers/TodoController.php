@@ -4,10 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class TodoController extends Controller
 {
+    /**
+     * List all todos
+     *
+     * This endpoint retrieves a list of todos, filtered by status, sorted, and searchable by title or details.
+     * 
+     * @queryParam status string Filter by status (completed, in progress, not started). Example: completed
+     * @queryParam search string Search by title or details. Example: meeting
+     * @queryParam sort string Sort by field (e.g., title:asc, status:desc). Example: title:asc
+     *
+     * @response 200 {
+     *  "data": [
+     *      {
+     *          "id": 1,
+     *          "title": "Sample Todo",
+     *          "details": "This is a sample todo",
+     *          "status": "in progress",
+     *          "created_at": "2024-12-13T12:34:56Z",
+     *          "updated_at": "2024-12-13T12:34:56Z"
+     *      }
+     *  ]
+     * }
+     */
+
+
     public function index(Request $request)
     {
 
@@ -45,6 +70,24 @@ class TodoController extends Controller
         return response()->json(["status" => "success", "data" => $query->get()]);
     }
 
+    /**
+     * Create a new todo
+     *
+     * This endpoint creates a new todo item.
+     * 
+     * @bodyParam title string required The title of the todo. Example: "Write report"
+     * @bodyParam details string The details of the todo. Example: "Complete the report for Monday's meeting"
+     * @bodyParam status string The status of the todo (completed, in progress, not started). Example: "not started"
+     *
+     * @response 201 {
+     *  "id": 1,
+     *  "title": "Write report",
+     *  "details": "Complete the report for Monday's meeting",
+     *  "status": "not started",
+     *  "created_at": "2024-12-13T12:34:56Z",
+     *  "updated_at": "2024-12-13T12:34:56Z"
+     * }
+     */
     public function store(Request $request)
     {
 
@@ -63,6 +106,26 @@ class TodoController extends Controller
         }
     }
 
+    /**
+     * Update a todo
+     *
+     * This endpoint updates the details of an existing todo item.
+     * 
+     * @urlParam id int required The ID of the todo to update. Example: 1
+     * @bodyParam title string The new title of the todo. Example: "Updated report"
+     * @bodyParam details string The new details of the todo. Example: "Update the report for Tuesday's meeting"
+     * @bodyParam status string The new status of the todo (completed, in progress, not started). Example: "completed"
+     *
+     * @response 200 {
+     *  "id": 1,
+     *  "title": "Updated report",
+     *  "details": "Update the report for Tuesday's meeting",
+     *  "status": "completed",
+     *  "created_at": "2024-12-13T12:34:56Z",
+     *  "updated_at": "2024-12-13T12:45:00Z"
+     * }
+     */
+
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
@@ -77,6 +140,22 @@ class TodoController extends Controller
         return response()->json(["status" => "success", "message" => "Todo updated successfully", "data" => $todo]);
     }
 
+    /**
+     * Delete a todo
+     *
+     * This endpoint deletes a todo by its ID.
+     * 
+     * @urlParam id int required The ID of the todo to delete. Example: 1
+     *
+     * @response 204 {
+     *  "message": "Todo deleted successfully"
+     * }
+     * * @response 404 {
+     *  "status": "error",
+     *  "message": "Todo not found"
+     * }
+     */
+
     public function destroy($id)
     {
         try {
@@ -85,10 +164,37 @@ class TodoController extends Controller
             $todo->delete();
 
             return response()->json(['status' => 'success', 'message' => 'Todo deleted successfully']);
-        } catch (Exception $e) {
-            return response()->json(['status' => 'error', 'message' => 'An error occured', 'errorMessage' => $e->getMessage()], 500);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['status' => 'error', 'message' => 'Todo not found'], 404);
         }
     }
+
+    /**
+     * Get deleted todos
+     *
+     * This endpoint retrieves all todos that have been soft-deleted.
+     * 
+     * @response 200 {
+     *  "status": "success",
+     *  "data": [
+     *      {
+     *          "id": 1,
+     *          "title": "Deleted Todo",
+     *          "details": "This todo has been deleted",
+     *          "status": "not started",
+     *          "created_at": "2024-12-01T12:00:00Z",
+     *          "updated_at": "2024-12-01T12:00:00Z",
+     *          "deleted_at": "2024-12-12T12:00:00Z"
+     *      }
+     *  ]
+     * }
+     *
+     * 
+     * @response 404 {
+     *  "status": "error",
+     *  "message": "Todo not found"
+     * }
+     */
 
     public function  deletedTodo()
     {
@@ -100,23 +206,73 @@ class TodoController extends Controller
         }
     }
 
+    /**
+     * Restore a deleted todo
+     *
+     * This endpoint restores a soft-deleted todo by its ID.
+     * 
+     * @urlParam id int required The ID of the todo to restore. Example: 1
+     *
+     * @response 200 {
+     *  "status": "success",
+     *  "message": "Todo restored successfully!"
+     * }
+     *
+     * @response 404 {
+     *  "status": "error",
+     *  "message": "Todo not found"
+     * }
+     */
+
     public function restoreTodo($id)
     {
-        $todo  = Todo::withTrashed()->findOrFail($id);
-        $todo->restore();
-        return response()->json(['status' => 'success', 'message' => 'Todo restored successfully!']);
+        try {
+            $todo = Todo::withTrashed()->findOrFail($id);
+            $todo->restore();
+            return response()->json(['status' => 'success', 'message' => 'Todo restored successfully!']);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['status' => 'error', 'message' => 'Todo not found'], 404);
+        }
     }
 
+    /**
+     * Permanently delete a todo
+     *
+     * This endpoint permanently deletes a soft-deleted todo by its ID.
+     * It ensures that the todo is already soft-deleted before attempting permanent deletion.
+     * 
+     * @urlParam id int required The ID of the todo to delete permanently. Example: 1
+     *
+     * @response 200 {
+     *  "status": "success",
+     *  "message": "Todo permanently deleted"
+     * }
+     *
+     * @response 400 {
+     *  "status": "error",
+     *  "message": "Todo is not deleted"
+     * }
+     *
+     * @response 404 {
+     *  "status": "error",
+     *  "message": "Todo not found"
+     * }
+     */
     public function deletePermanently($id)
     {
-        $todo = Todo::withTrashed()->findOrFail($id);
+        try {
 
-        if (!$todo->trashed()) {
-            return response()->json(['status' => 'error', 'message' => 'Todo is not deleted'], 400);
+            $todo = Todo::withTrashed()->findOrFail($id);
+
+            if (!$todo->trashed()) {
+                return response()->json(['status' => 'error', 'message' => 'Todo is not deleted'], 400);
+            }
+
+            $todo->forceDelete();
+
+            return response()->json(['status' => 'success', 'message' => 'Todo permanently deleted']);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['status' => 'error', 'message' => 'Todo not found'], 404);
         }
-
-        $todo->forceDelete();
-
-        return response()->json(['status' => 'success', 'message' => 'Todo permanently deleted']);
     }
 }

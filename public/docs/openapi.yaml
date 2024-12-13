@@ -1,0 +1,476 @@
+openapi: 3.0.3
+info:
+  title: 'Todo App API'
+  description: 'API documentation for the Todo App.'
+  version: 1.0.0
+servers:
+  -
+    url: 'https://todobackend-production-0720.up.railway.app'
+paths:
+  /api/todos:
+    get:
+      summary: 'List all todos'
+      operationId: listAllTodos
+      description: 'This endpoint retrieves a list of todos, filtered by status, sorted, and searchable by title or details.'
+      parameters:
+        -
+          in: query
+          name: status
+          description: 'Filter by status (completed, in progress, not started).'
+          example: completed
+          required: false
+          schema:
+            type: string
+            description: 'Filter by status (completed, in progress, not started).'
+            example: completed
+            nullable: false
+        -
+          in: query
+          name: search
+          description: 'Search by title or details.'
+          example: meeting
+          required: false
+          schema:
+            type: string
+            description: 'Search by title or details.'
+            example: meeting
+            nullable: false
+        -
+          in: query
+          name: sort
+          description: 'Sort by field (e.g., title:asc, status:desc).'
+          example: 'title:asc'
+          required: false
+          schema:
+            type: string
+            description: 'Sort by field (e.g., title:asc, status:desc).'
+            example: 'title:asc'
+            nullable: false
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1
+                      title: 'Sample Todo'
+                      details: 'This is a sample todo'
+                      status: 'in progress'
+                      created_at: '2024-12-13T12:34:56Z'
+                      updated_at: '2024-12-13T12:34:56Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        title: 'Sample Todo'
+                        details: 'This is a sample todo'
+                        status: 'in progress'
+                        created_at: '2024-12-13T12:34:56Z'
+                        updated_at: '2024-12-13T12:34:56Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: 'Sample Todo'
+                        details:
+                          type: string
+                          example: 'This is a sample todo'
+                        status:
+                          type: string
+                          example: 'in progress'
+                        created_at:
+                          type: string
+                          example: '2024-12-13T12:34:56Z'
+                        updated_at:
+                          type: string
+                          example: '2024-12-13T12:34:56Z'
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sort_by:
+                  type: string
+                  description: ''
+                  example: status
+                  nullable: false
+                  enum:
+                    - title
+                    - status
+                    - created_at
+                sort_direction:
+                  type: string
+                  description: ''
+                  example: asc
+                  nullable: false
+                  enum:
+                    - asc
+                    - desc
+      security: []
+    post:
+      summary: 'Create a new todo'
+      operationId: createANewTodo
+      description: 'This endpoint creates a new todo item.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  title: 'Write report'
+                  details: "Complete the report for Monday's meeting"
+                  status: 'not started'
+                  created_at: '2024-12-13T12:34:56Z'
+                  updated_at: '2024-12-13T12:34:56Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: 'Write report'
+                  details:
+                    type: string
+                    example: "Complete the report for Monday's meeting"
+                  status:
+                    type: string
+                    example: 'not started'
+                  created_at:
+                    type: string
+                    example: '2024-12-13T12:34:56Z'
+                  updated_at:
+                    type: string
+                    example: '2024-12-13T12:34:56Z'
+      tags:
+        - Endpoints
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'The title of the todo.'
+                  example: '"Write report"'
+                  nullable: false
+                details:
+                  type: string
+                  description: 'The details of the todo.'
+                  example: '"Complete the report for Monday''s meeting"'
+                  nullable: false
+                status:
+                  type: string
+                  description: 'The status of the todo (completed, in progress, not started).'
+                  example: '"not started"'
+                  nullable: false
+              required:
+                - title
+      security: []
+  '/api/todos/{id}':
+    put:
+      summary: 'Update a todo'
+      operationId: updateATodo
+      description: 'This endpoint updates the details of an existing todo item.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 1
+                  title: 'Updated report'
+                  details: "Update the report for Tuesday's meeting"
+                  status: completed
+                  created_at: '2024-12-13T12:34:56Z'
+                  updated_at: '2024-12-13T12:45:00Z'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: 'Updated report'
+                  details:
+                    type: string
+                    example: "Update the report for Tuesday's meeting"
+                  status:
+                    type: string
+                    example: completed
+                  created_at:
+                    type: string
+                    example: '2024-12-13T12:34:56Z'
+                  updated_at:
+                    type: string
+                    example: '2024-12-13T12:45:00Z'
+      tags:
+        - Endpoints
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: 'The new title of the todo.'
+                  example: '"Updated report"'
+                  nullable: false
+                details:
+                  type: string
+                  description: 'The new details of the todo.'
+                  example: '"Update the report for Tuesday''s meeting"'
+                  nullable: false
+                status:
+                  type: string
+                  description: 'The new status of the todo (completed, in progress, not started).'
+                  example: '"completed"'
+                  nullable: false
+      security: []
+    delete:
+      summary: 'Delete a todo'
+      operationId: deleteATodo
+      description: 'This endpoint deletes a todo by its ID.'
+      parameters: []
+      responses:
+        204:
+          description: ''
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the todo to update.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/todos/deleted:
+    get:
+      summary: 'Get deleted todos'
+      operationId: getDeletedTodos
+      description: 'This endpoint retrieves all todos that have been soft-deleted.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: success
+                  data:
+                    -
+                      id: 1
+                      title: 'Deleted Todo'
+                      details: 'This todo has been deleted'
+                      status: 'not started'
+                      created_at: '2024-12-01T12:00:00Z'
+                      updated_at: '2024-12-01T12:00:00Z'
+                      deleted_at: '2024-12-12T12:00:00Z'
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1
+                        title: 'Deleted Todo'
+                        details: 'This todo has been deleted'
+                        status: 'not started'
+                        created_at: '2024-12-01T12:00:00Z'
+                        updated_at: '2024-12-01T12:00:00Z'
+                        deleted_at: '2024-12-12T12:00:00Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: 'Deleted Todo'
+                        details:
+                          type: string
+                          example: 'This todo has been deleted'
+                        status:
+                          type: string
+                          example: 'not started'
+                        created_at:
+                          type: string
+                          example: '2024-12-01T12:00:00Z'
+                        updated_at:
+                          type: string
+                          example: '2024-12-01T12:00:00Z'
+                        deleted_at:
+                          type: string
+                          example: '2024-12-12T12:00:00Z'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Todo not found'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Todo not found'
+      tags:
+        - Endpoints
+      security: []
+  '/api/todos/restore/{id}':
+    get:
+      summary: 'Restore a deleted todo'
+      operationId: restoreADeletedTodo
+      description: 'This endpoint restores a soft-deleted todo by its ID.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: success
+                  message: 'Todo restored successfully!'
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: 'Todo restored successfully!'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Todo not found'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Todo not found'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the todo to restore.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  '/api/todos/delete-perm/{id}':
+    delete:
+      summary: 'Permanently delete a todo'
+      operationId: permanentlyDeleteATodo
+      description: "This endpoint permanently deletes a soft-deleted todo by its ID.\nIt ensures that the todo is already soft-deleted before attempting permanent deletion."
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: success
+                  message: 'Todo permanently deleted'
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: 'Todo permanently deleted'
+        400:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Todo is not deleted'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Todo is not deleted'
+        404:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  status: error
+                  message: 'Todo not found'
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: 'Todo not found'
+      tags:
+        - Endpoints
+      security: []
+    parameters:
+      -
+        in: path
+        name: id
+        description: 'The ID of the todo to delete permanently.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+tags:
+  -
+    name: Endpoints
+    description: ''

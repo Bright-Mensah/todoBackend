@@ -5,9 +5,6 @@ use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
 Route::get('/todos', [TodoController::class, 'index']); // List with filters & search todos
 Route::post('/todos', [TodoController::class, 'store']); // Create todo
