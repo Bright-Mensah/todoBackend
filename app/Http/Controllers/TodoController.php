@@ -60,7 +60,7 @@ class TodoController extends Controller
             return response()->json($todo, 201);
 
 
-            // return response()->json(["status" => "success", "message" => "Todo created successfully", "todo" => $todo], 201);
+            return response()->json(["status" => "success", "message" => "Todo created successfully", "todo" => $todo], 201);
         } catch (\Exception $ex) {
             return response()->json(["error" => $ex->getMessage()], 500);
         }
