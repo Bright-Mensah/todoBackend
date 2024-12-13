@@ -23,6 +23,8 @@ return [
                 // Match only routes whose domains match this pattern (use * as a wildcard to match any characters). Example: 'api.*'.
                 'domains' => ['*'],
 
+                'path' => '/docs',
+
                 // [Dingo router only] Match only routes registered under this version. Wildcards are NOT supported.
                 'versions' => ['v1'],
             ],
